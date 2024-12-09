@@ -8,18 +8,15 @@ create() {
     if [[ $# -eq 1 ]]; then 
         local filename="$1.tex"
         touch $filename
-        exit 0
     elif [[ $# -eq 3 ]]; then
-        while getopts ":t" opt; do
+        while getopts ":t:" opt; do
             case $opt in
                 t)
-                    echo "You choose to create a .tex file with template $OPTARG"
                     shift
                     local template="$1.tex"
                     local filename="$2.tex"
                     touch $filename
                     cp "$script_dir/../../configuration/templates/$template" $filename
-                    exit 0
                     ;;
                 \?)
                     echo "Invalid option: -$OPTARG" >&2
@@ -38,11 +35,13 @@ create() {
 }
 
 compile() {
-    echo "You have compiled a file"
+    shift
+    latexmk -pdflatex=lualatex -pdf -outdir=./aux -interaction=nonstopmode -view=none $1
 }
 
 run() {
-    echo "You have run the filed"
+    shift
+    latexmk -pdflatex=lualatex -pdf -outdir=./aux -pvc -interaction=nonstopmode -view=none $1
 }
 
 main() {
