@@ -1,3 +1,0 @@
-#!/bin/zsh
-
-latexmk -pdflatex=lualatex -pdf -outdir=./aux -pvc -synctex=1 -interaction=nonstopmode -view=none $1
