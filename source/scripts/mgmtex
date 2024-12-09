@@ -1,7 +1,40 @@
 #!/bin/zsh
 
+script_path=$(command -v "$0")
+script_dir=$(dirname "$script_path")
+
 create() {
-    echo "You have created a file"
+    shift
+    if [[ $# -eq 1 ]]; then 
+        local filename="$1.tex"
+        touch $filename
+        exit 0
+    elif [[ $# -eq 3 ]]; then
+        while getopts ":t" opt; do
+            case $opt in
+                t)
+                    echo "You choose to create a .tex file with template $OPTARG"
+                    shift
+                    local template="$1.tex"
+                    local filename="$2.tex"
+                    touch $filename
+                    cp "$script_dir/../../configuration/templates/$template" $filename
+                    exit 0
+                    ;;
+                \?)
+                    echo "Invalid option: -$OPTARG" >&2
+                    exit 1
+                    ;;
+                :) 
+                    echo "Option -$OPTARG requires an argument" >&2
+                    exit 1
+                    ;;
+            esac
+        done
+    else 
+        echo "Usage: $0 create [-t] filename"
+        exit 1
+    fi
 }
 
 compile() {
@@ -21,13 +54,13 @@ main() {
     subcommand=$1
     case $subcommand in
         create)
-            create
+            create "$@"
             ;;
         compile)
-            compile
+            compile "$@"
             ;;
         run)
-            run
+            run "$@"
             ;;
         *)
             echo "Unknown subcommand: $subcommand"
