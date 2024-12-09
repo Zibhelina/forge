@@ -12,11 +12,10 @@ create() {
         while getopts ":t:" opt; do
             case $opt in
                 t)
-                    shift
-                    local template="$1.tex"
-                    local filename="$2.tex"
+                    shift 2
+                    local filename="$1.tex"
                     touch $filename
-                    cp "$script_dir/../../configuration/templates/$template" $filename
+                    cp "$script_dir/../../configuration/templates/$OPTARG.tex" $filename
                     ;;
                 \?)
                     echo "Invalid option: -$OPTARG" >&2
