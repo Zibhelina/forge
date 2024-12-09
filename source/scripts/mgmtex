@@ -1,3 +1,40 @@
 #!/bin/zsh
 
-if [$2 == "create"]
+create() {
+    echo "You have created a file"
+}
+
+compile() {
+    echo "You have compiled a file"
+}
+
+run() {
+    echo "You have run the filed"
+}
+
+main() {
+    if [[ $# -lt 1 ]]; then
+        echo "Usage: $0 {create|compile|run} [options] filename"
+        exit 1
+    fi
+
+    subcommand=$1
+    case $subcommand in
+        create)
+            create
+            ;;
+        compile)
+            compile
+            ;;
+        run)
+            run
+            ;;
+        *)
+            echo "Unknown subcommand: $subcommand"
+            echo "Usage: $0 {create|compile|run} [options] filename"
+            exit 1
+            ;;
+    esac
+}
+
+main "$@"
